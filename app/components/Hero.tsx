@@ -36,7 +36,7 @@ const Hero = () => {
               </motion.div>
 
               <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                <span className="block">Refugee Young</span>
+                <span className="block">Refugees Young</span>
                 <span className="block text-primary-600">Adults (PWDs)</span>
               </h1>
 
