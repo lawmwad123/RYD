@@ -52,7 +52,7 @@ const team = [
   },
   {
     name: 'Augustus Twinemugabe',
-    role: 'Program Director',
+    role: 'Founder & CMO',
     image: '/AugustusTwinemugabe.jpeg',
     bio: 'Leading our community programs and support initiatives with passion and expertise.'
   },
