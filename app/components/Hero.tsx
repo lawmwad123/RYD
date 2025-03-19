@@ -32,7 +32,7 @@ const Hero = () => {
                 className="inline-flex items-center px-4 py-2 rounded-full bg-primary-50 text-primary-600 mb-6"
               >
                 <Sparkles className="h-4 w-4 mr-2" />
-                <span className="text-sm font-medium">Transforming Lives Together</span>
+                <span className="text-sm font-medium">Bringing Therapy Closer to You</span>
               </motion.div>
 
               <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
