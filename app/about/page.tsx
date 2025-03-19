@@ -47,19 +47,19 @@ const team = [
   {
     name: 'Shalom Omondo',
     role: 'Founder & Executive Director',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
     bio: 'Licensed psychologist with 15+ years of experience in mental health advocacy and support.'
   },
   {
     name: 'Augustus Twinemugabe',
-    role: 'Founder & CMO',
+    role: 'Founder & Marketing Director',
     image: '/AugustusTwinemugabe.jpeg',
     bio: 'Leading our community programs and support initiatives with passion and expertise.'
   },
   {
     name: 'Dr. Emily Rodriguez',
     role: 'Clinical Director',
-    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
     bio: 'Specializing in trauma-informed care and evidence-based therapeutic approaches.'
   }
 ];
