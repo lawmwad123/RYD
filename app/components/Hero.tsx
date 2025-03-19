@@ -41,7 +41,8 @@ const Hero = () => {
               </h1>
 
               <p className="mt-6 text-lg text-gray-600 max-w-xl mx-auto lg:mx-0">
-              Empowering individuals to reclaim their mental well-being through faith-based therapy, telehealth counseling, support groups, self-help resources, peer support, rehabilitation, and spiritual reintegration.
+              Empowering individuals to reclaim their mental well-being through faith-based therapy, telehealth counseling, support groups, self-help resources, peer support, rehabilitation, and spiritual reintegration. 
+              
               </p>
               <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link
