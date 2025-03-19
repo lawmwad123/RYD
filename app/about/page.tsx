@@ -47,8 +47,8 @@ const team = [
   {
     name: 'Shalom Omondo',
     role: 'Founder & Executive Director',
-    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-    bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+    image: '/MariamNakatudde2.jpeg',
+    bio: 'A passionate mental health advocate with over 5 years of experience working with mental health organizations. Her dedication to transforming lives through accessible mental healthcare and community support has helped countless individuals on their healing journey.'
   },
   {
     name: 'Augustus Twinemugabe',
@@ -59,7 +59,7 @@ const team = [
   {
     name: 'Mariam Nakatudde . S. ',
     role: 'Program Director',
-    image: '/MariamNakatudde2.jpeg',
+    image: '/MariamNakatudde.jpeg',
     bio: 'Specializing in trauma-informed care and evidence-based therapeutic approaches.'
   }
 ];
