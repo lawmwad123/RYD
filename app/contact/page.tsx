@@ -31,7 +31,7 @@ const contactMethods = [
     icon: Mail,
     color: "text-purple-600",
     bgColor: "bg-purple-100",
-    contact: "support@restoredignity.org",
+    contact: "support@ryd.org",
   },
   {
     title: "Office Hours",
@@ -302,9 +302,9 @@ export default function ContactPage() {
                     <MapPin className="h-6 w-6 text-primary-600 mt-1" />
                     <div>
                       <p className="text-gray-600">
-                        123 Mental Health Street<br />
-                        Suite 100<br />
-                        San Francisco, CA 94105
+                      Bujumbura<br />
+                      Hoima City,<br />
+                         Uganda
                       </p>
                     </div>
                   </div>

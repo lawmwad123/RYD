@@ -3,7 +3,7 @@
 A modern, responsive website for Restore Your Dignity, an organization dedicated to supporting mental health and well-being through community and resources.
 
 ## 🌐 Live Website
-Visit our website at: [restoredignity.org](https://restoredignity.org)
+Visit our website at: [ryd.org](https://ryd.org)
 
 ## 🚀 Features
 
@@ -63,7 +63,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🤝 Contact
 
 For any questions or support, please contact us at:
-- Email: support@restoredignity.org
+- Email: support@ryd.org
 - Phone: +256 776 803262
 - Address: 123 Wellness Street, Mental Health City, MH 12345
 
