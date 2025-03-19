@@ -42,7 +42,7 @@ const Hero = () => {
 
               <p className="mt-6 text-lg text-gray-600 max-w-xl mx-auto lg:mx-0">
               Empowering individuals to reclaim their mental well-being through faith-based therapy, telehealth counseling, support groups, self-help resources, peer support, rehabilitation, and spiritual reintegration. 
-              
+
               </p>
               <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link
@@ -69,7 +69,7 @@ const Hero = () => {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="relative"
             >
-              <div className="relative w-full h-[500px] rounded-2xl overflow-hidden shadow-2xl">
+              {/* <div className="relative w-full h-[500px] rounded-2xl overflow-hidden shadow-2xl">
                 <Image
                   src="https://hips.hearstapps.com/hmg-prod/images/dicentra-spectabilis-royalty-free-image-1717559164.jpg?crop=0.668xw:1.00xh;0.327xw,0&resize=980:*"
                   alt="Support and Healing"
@@ -78,7 +78,7 @@ const Hero = () => {
                   priority
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-              </div>
+              </div> */}
             </motion.div>
           </div>
         </div>

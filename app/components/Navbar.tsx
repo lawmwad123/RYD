@@ -50,6 +50,12 @@ const Navbar = () => {
             >
               Donate
             </Link>
+            <Link
+              href="/donate"
+              className="btn btn-primary px-4 py-2"
+            >
+              Partner with Us
+            </Link>
           </div>
 
           {/* Mobile menu button */}
