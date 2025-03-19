@@ -114,7 +114,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-primary-400" />
-                <span className="text-gray-400">support@restoredignity.org</span>
+                <span className="text-gray-400">support@ryd.org</span>
               </li>
             </ul>
           </div>
@@ -136,7 +136,7 @@ export default function Footer() {
               ))}
             </div>
             <p className="text-gray-400 text-sm">
-              © {new Date().getFullYear()} Restore Your Dignity. All rights reserved.
+              © {new Date().getFullYear()} Refugee Young Adults (PWDs). All rights reserved.
             </p>
           </div>
         </div>
