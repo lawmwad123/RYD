@@ -36,8 +36,8 @@ const Hero = () => {
               </motion.div>
 
               <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                <span className="block">Refugees Young</span>
-                <span className="block text-primary-600">Adults (PWDs)</span>
+                <span className="block">RYD</span>
+                <span className="block text-primary-600">Mental Health Organization</span>
               </h1>
 
               <p className="mt-6 text-lg text-gray-600 max-w-xl mx-auto lg:mx-0">
