@@ -18,41 +18,37 @@ import Footer from '../components/Footer';
 
 const contactMethods = [
   {
-    title: 'Phone Support',
-    description: 'Call us for immediate assistance',
+    title: "Phone Support",
+    description: "Call us directly for immediate assistance",
     icon: Phone,
-    value: '+1 (555) 123-4567',
-    color: 'blue',
-    action: 'Call Now',
-    href: 'tel:+15551234567'
+    color: "text-blue-600",
+    bgColor: "bg-blue-100",
+    contact: "+256 709 039 595 / +256 776 803262",
   },
   {
-    title: 'Email',
-    description: 'Send us a message',
+    title: "Email",
+    description: "Send us an email anytime",
     icon: Mail,
-    value: 'support@ryd.org',
-    color: 'red',
-    action: 'Email Us',
-    href: 'mailto:support@ryd.org'
+    color: "text-purple-600",
+    bgColor: "bg-purple-100",
+    contact: "support@restoredignity.org",
   },
   {
-    title: 'Office Hours',
-    description: 'Visit us in person',
+    title: "Office Hours",
+    description: "Visit our office in Hoima",
     icon: Clock,
-    value: 'Mon-Fri: 9am - 6pm',
-    color: 'green',
-    action: 'Get Directions',
-    href: '#location'
+    color: "text-green-600",
+    bgColor: "bg-green-100",
+    contact: "Monday - Friday, 9:00 AM - 5:00 PM",
   },
   {
-    title: 'Online Chat',
-    description: 'Chat with our support team',
-    icon: MessageSquare,
-    value: 'Available 24/7',
-    color: 'purple',
-    action: 'Start Chat',
-    href: '/chat'
-  }
+    title: "Location",
+    description: "Bujumbura, Hoima City, Uganda",
+    icon: MapPin,
+    color: "text-red-600",
+    bgColor: "bg-red-100",
+    contact: "Visit us at our office",
+  },
 ];
 
 const features = [
@@ -84,17 +80,17 @@ const ContactMethodCard = ({ method, index }: { method: typeof contactMethods[0]
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
     >
-      <div className={`p-3 rounded-xl bg-${method.color}-100 text-${method.color}-600 inline-block mb-4`}>
+      <div className={`p-3 rounded-xl bg-${method.color} text-${method.color} inline-block mb-4`}>
         <Icon className="h-6 w-6" />
       </div>
       <h3 className="text-xl font-semibold text-gray-900 mb-2">{method.title}</h3>
       <p className="text-gray-600 mb-4">{method.description}</p>
-      <p className="text-lg font-medium text-gray-900 mb-4">{method.value}</p>
+      <p className="text-lg font-medium text-gray-900 mb-4">{method.contact}</p>
       <a
-        href={method.href}
+        href={`tel:${method.contact.split('/')[0]}`}
         className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium group"
       >
-        {method.action}
+        Call Now
         <ArrowRight className="ml-2 h-5 w-5 transform group-hover:translate-x-1 transition-transform" />
       </a>
     </motion.div>
@@ -319,35 +315,17 @@ export default function ContactPage() {
         </section>
 
         {/* Map Section */}
-        <section id="location" className="py-20 bg-gray-50">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="text-center max-w-3xl mx-auto mb-12"
-            >
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                Visit Us
-              </h2>
-              <p className="text-xl text-gray-600">
-                Find us at our office location in San Francisco.
-              </p>
-            </motion.div>
-
-            <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-xl">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.835434509374!2d-122.4194!3d37.7749!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085809c6c8f445b%3A0xb10ed6d9b5050fa5!2sSan%20Francisco%2C%20CA!5e0!3m2!1sen!2sus!4v1647041234567!5m2!1sen!2sus"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
-            </div>
-          </div>
+        <section className="w-full h-[400px] relative mt-16">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.7374847676385!2d31.352759376212766!3d1.4330979611447282!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMjUnNTkuMiJOIDMxwrAyMScxNy44IkU!5e0!3m2!1sen!2sug!4v1710881400000!5m2!1sen!2sug"
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            className="absolute inset-0"
+          />
         </section>
       </div>
       <Footer />
