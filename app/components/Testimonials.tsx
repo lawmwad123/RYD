@@ -11,19 +11,19 @@ import 'swiper/css/pagination';
 const testimonials = [
   {
     id: 1,
-    name: 'Sarah Johnson',
+    name: 'Trevor Twinomugisha',
     role: 'Community Member',
     content: 'RYD has been a lifeline for me. The support and resources provided have helped me navigate my mental health journey with confidence.',
     rating: 5,
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&h=500&fit=crop',
+    image: '/Trevor_Twinomugisha.jpeg',
   },
   {
     id: 2,
-    name: 'Michael Chen',
+    name: 'Marian Mable',
     role: 'Volunteer',
     content: 'Being part of RYD\'s community has been incredibly rewarding. The organization\'s commitment to mental health support is truly inspiring.',
     rating: 5,
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop',
+    image: '/Marian_Mable.jpeg',
   },
   {
     id: 3,

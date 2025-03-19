@@ -57,9 +57,9 @@ const team = [
     bio: 'Leading our community programs and support initiatives with passion and expertise.'
   },
   {
-    name: 'Dr. Emily Rodriguez',
-    role: 'Clinical Director',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+    name: 'Mariam Nakatudde . S. ',
+    role: 'Program Director',
+    image: '/MariamNakatudde.jpeg',
     bio: 'Specializing in trauma-informed care and evidence-based therapeutic approaches.'
   }
 ];
