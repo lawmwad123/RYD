@@ -10,6 +10,7 @@ const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Services', href: '/services' },
   { name: 'Resources', href: '/resources' },
+  { name: 'Gallery', href: '/gallery' },
   { name: 'About', href: '/about' },
   { name: 'Contact', href: '/contact' },
 ];
@@ -100,6 +101,13 @@ const Navbar = () => {
                 onClick={() => setIsOpen(false)}
               >
                 Donate
+              </Link>
+              <Link
+                href="/donate"
+                className="block px-3 py-2 text-white bg-primary-600 hover:bg-primary-700 rounded-md"
+                onClick={() => setIsOpen(false)}
+              >
+                Partner with Us
               </Link>
             </div>
           </motion.div>
