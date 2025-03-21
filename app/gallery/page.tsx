@@ -9,18 +9,126 @@ import Footer from '../components/Footer';
 
 const categories = [
   { id: 'all', name: 'All Images' },
-  { id: 'events', name: 'Events' },
-  { id: 'programs', name: 'Programs' },
-  { id: 'community', name: 'Community' },
+  { id: 'events', name: 'Community Events' },
+  { id: 'programs', name: 'Support Programs' },
+  { id: 'community', name: 'Community Impact' },
+  { id: 'workshops', name: 'Workshops & Training' },
 ];
 
-const images = Array.from({ length: 16 }, (_, i) => ({
-  id: i + 1,
-  src: `/gallery/G${i + 1}.jpeg`,
-  alt: `Gallery Image ${i + 1}`,
-  category: categories[Math.floor(Math.random() * (categories.length - 1)) + 1].id,
-  description: `Description for image ${i + 1}`,
-}));
+const images = [
+  {
+    id: 1,
+    src: '/gallery/G1.jpeg',
+    alt: 'Community gathering and support session',
+    category: 'community',
+    description: 'Community members coming together for a support session, sharing experiences and building connections.',
+  },
+  {
+    id: 2,
+    src: '/gallery/G2.jpeg',
+    alt: 'Mental health awareness workshop',
+    category: 'workshops',
+    description: 'Interactive workshop session focusing on mental health awareness and well-being practices.',
+  },
+  {
+    id: 3,
+    src: '/gallery/G3.jpeg',
+    alt: 'Youth empowerment program',
+    category: 'programs',
+    description: 'Young participants engaging in our youth empowerment program, developing life skills and confidence.',
+  },
+  {
+    id: 4,
+    src: '/gallery/G4.jpeg',
+    alt: 'Community outreach event',
+    category: 'events',
+    description: 'Outreach program bringing mental health support and resources to local communities.',
+  },
+  {
+    id: 5,
+    src: '/gallery/G5.jpeg',
+    alt: 'Group therapy session',
+    category: 'programs',
+    description: 'Supportive group therapy session providing a safe space for sharing and healing.',
+  },
+  {
+    id: 6,
+    src: '/gallery/G6.jpeg',
+    alt: 'Mental health training workshop',
+    category: 'workshops',
+    description: 'Professional training workshop for mental health awareness and support techniques.',
+  },
+  {
+    id: 7,
+    src: '/gallery/G7.jpeg',
+    alt: 'Community celebration event',
+    category: 'events',
+    description: 'Joyful community celebration marking the success of our mental health initiatives.',
+  },
+  {
+    id: 8,
+    src: '/gallery/G8.jpeg',
+    alt: 'Support group meeting',
+    category: 'programs',
+    description: 'Regular support group meeting fostering connection and mutual understanding.',
+  },
+  {
+    id: 9,
+    src: '/gallery/G9.jpeg',
+    alt: 'Youth mental health program',
+    category: 'programs',
+    description: 'Engaging youth program focused on mental health education and support.',
+  },
+  {
+    id: 10,
+    src: '/gallery/G10.jpeg',
+    alt: 'Community workshop session',
+    category: 'workshops',
+    description: 'Interactive workshop session with community members learning about mental well-being.',
+  },
+  {
+    id: 11,
+    src: '/gallery/G11.jpeg',
+    alt: 'Mental health awareness event',
+    category: 'events',
+    description: 'Community event raising awareness about mental health and available support services.',
+  },
+  {
+    id: 12,
+    src: '/gallery/G12.jpeg',
+    alt: 'Support program activities',
+    category: 'programs',
+    description: 'Participants engaging in therapeutic activities during a support program session.',
+  },
+  {
+    id: 13,
+    src: '/gallery/G13.jpeg',
+    alt: 'Community mental health workshop',
+    category: 'workshops',
+    description: 'Comprehensive mental health workshop for community members and leaders.',
+  },
+  {
+    id: 14,
+    src: '/gallery/G14.jpeg',
+    alt: 'Youth support program',
+    category: 'programs',
+    description: 'Dedicated youth support program helping young people navigate mental health challenges.',
+  },
+  {
+    id: 15,
+    src: '/gallery/G15.jpeg',
+    alt: 'Community mental health event',
+    category: 'events',
+    description: 'Large-scale community event promoting mental health awareness and support.',
+  },
+  {
+    id: 16,
+    src: '/gallery/G16.jpeg',
+    alt: 'Mental health training session',
+    category: 'workshops',
+    description: 'Professional training session for mental health support and intervention techniques.',
+  },
+];
 
 const GalleryImage = ({ image, onClick }: { image: typeof images[0], onClick: () => void }) => (
   <motion.div
