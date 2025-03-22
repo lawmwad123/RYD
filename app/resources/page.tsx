@@ -52,31 +52,49 @@ const resourceCategories = [
 
 const featuredResources = [
   {
-    title: 'Understanding Anxiety',
-    description: 'A comprehensive guide to understanding and managing anxiety.',
+    title: 'Drug Addiction',
+    description: 'Understanding and overcoming drug addiction: A comprehensive guide for recovery and support.',
     type: 'Guide',
     icon: Brain,
     color: 'blue',
-    downloadUrl: 'https://www.mcgill.ca/counselling/files/counselling/anxiety_moodjuice_self_help_guide.pdf',
-    previewUrl: 'https://elements-resized.envatousercontent.com/elements-cover-images/8e89897d-1d42-4092-8658-feb910f3fb8a?w=433&cf_fit=scale-down&q=85&format=auto&s=5c268869260e3ed5c54fecda0df189dab30481fa51e606675acfdc3022855724'
+    downloadUrl: '/resources/Drug_Addiction.pdf',
+    previewUrl: '/resources/drug-addiction_thumbnail.jpg'
   },
   {
-    title: 'Daily Wellness Journal',
-    description: 'A structured journal for tracking your mental health journey.',
-    type: 'Tool',
+    title: "Men's Mental Health",
+    description: 'Addressing mental health challenges specific to men: Breaking stigma and finding support.',
+    type: 'Guide',
     icon: Heart,
     color: 'red',
-    downloadUrl: 'https://cof.org/sites/default/files/documents/files/WellnessJournal.pdf',
-    previewUrl: 'https://images.squarespace-cdn.com/content/v1/587e753a15d5db6a801d01c5/1486936443696-XR9K52XA80AJL2AOQTJ3/Journal-Keeping-19.jpg'
+    downloadUrl: '/resources/MENS_MENTAL_HEALTH.pdf',
+    previewUrl: '/resources/mens_mental_health_thumbnail.jpeg'
   },
   {
-    title: 'Mindfulness Meditation',
-    description: 'Guided meditation sessions for stress relief.',
-    type: 'Video',
-    icon: Video,
+    title: 'Neglected but Not Forgotten',
+    description: 'Understanding and addressing mental health in marginalized communities.',
+    type: 'Guide',
+    icon: Users,
     color: 'purple',
-    downloadUrl: 'https://youtu.be/ZToicYcHIOU',
-    previewUrl: 'https://media.istockphoto.com/id/1313456479/photo/man-and-soul-yoga-lotus-pose-meditation-on-nebula-galaxy-background.jpg?s=612x612&w=0&k=20&c=jJ0pVed-sHjDBtomrO7KmR4qtIfH8OaNhjmEsXvJmAI='
+    downloadUrl: '/resources/NEGLECTED_BUT_NOT_FORGOTTEN.pdf',
+    previewUrl: '/resources/neglected_but_not_forgotten.jpg'
+  },
+  {
+    title: 'From Comfort to Addiction',
+    description: 'Understanding the journey from comfort eating to food addiction and recovery.',
+    type: 'Guide',
+    icon: Brain,
+    color: 'green',
+    downloadUrl: '/resources/from_comfort_to_addiction.pdf',
+    previewUrl: '/resources/from_confort_to_addiction.jpg'
+  },
+  {
+    title: 'Junk Foods',
+    description: 'The impact of junk food on mental health and strategies for healthier eating habits.',
+    type: 'Guide',
+    icon: Heart,
+    color: 'orange',
+    downloadUrl: '/resources/JUNK_FOODS.pdf',
+    previewUrl: '/resources/junk_foods.jpeg'
   }
 ];
 
