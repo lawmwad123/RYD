@@ -54,13 +54,7 @@ const team = [
     name: 'Augustus Twinemugabe',
     role: 'Founder & Marketing Director',
     image: '/AugustusTwinemugabe.jpeg',
-    bio: 'Leading our community programs and support initiatives with passion and expertise.'
-  },
-  {
-    name: 'Mariam Nakatudde . S. ',
-    role: 'Program Director',
-    image: '/MariamNakatudde.jpeg',
-    bio: 'Specializing in trauma-informed care and evidence-based therapeutic approaches.'
+    bio: 'Leading the organization\'s creative direction and outreach strategies. He also guides community programs and support initiatives with passion and expertise, working to create safe, inclusive spaces for healing.'
   }
 ];
 

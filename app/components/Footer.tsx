@@ -2,7 +2,25 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin, Youtube } from 'lucide-react';
+
+// Custom TikTok icon since it's not available in lucide-react
+const TikTokIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M9 12a4 4 0 1 0 4 4V4c0-1.1.9-2 2-2h2"></path>
+    <path d="M12 16a4 4 0 0 1-4 4"></path>
+  </svg>
+);
 
 const navigation = {
   main: [
@@ -17,27 +35,28 @@ const navigation = {
     { name: 'Resources', href: '/resources' },
     { name: 'Privacy Policy', href: '/privacy' },
     { name: 'Terms of Service', href: '/terms' },
+    { name: 'Volunteer With Us', href: '/volunteer' },
   ],
   social: [
     {
-      name: 'Facebook',
-      href: '#',
-      icon: Facebook,
-    },
-    {
       name: 'Twitter',
-      href: '#',
+      href: 'https://x.com/rydmentalhealth?s=21&t=PACYWgb3M-d3_bWgIFAq6g',
       icon: Twitter,
     },
     {
-      name: 'Instagram',
-      href: '#',
-      icon: Instagram,
+      name: 'TikTok',
+      href: 'https://www.tiktok.com/@rydmentalhealthorg?_t=ZM-8vi2hLMY7lN&_r=1',
+      icon: TikTokIcon,
     },
     {
       name: 'LinkedIn',
-      href: '#',
+      href: 'https://www.linkedin.com/in/ryd-mental-health-organisation-aa0310361?trk=contact-info',
       icon: Linkedin,
+    },
+    {
+      name: 'YouTube',
+      href: 'https://youtube.com/@rydmentalhealthorg?si=0wLcGq47GWePyNM-',
+      icon: Youtube,
     },
   ],
 };
@@ -104,17 +123,17 @@ export default function Footer() {
               <li className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-primary-400 mt-1" />
                 <span className="text-gray-400">
-                Bujumbura,<br />
-                Hoima City, Uganda
+                Namugongo,<br />
+                Wakiso, Uganda
                 </span>
               </li>
               <li className="flex items-center space-x-3">
                 <Phone className="h-5 w-5 text-primary-400" />
-                <span className="text-gray-400">+256 776 803262</span>
+                <span className="text-gray-400">+256 709 039595 / +256 776 803262</span>
               </li>
               <li className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-primary-400" />
-                <span className="text-gray-400">support@ryd.org</span>
+                <span className="text-gray-400">info@rydmentalhealth.org</span>
               </li>
             </ul>
           </div>
@@ -129,6 +148,8 @@ export default function Footer() {
                   key={item.name}
                   href={item.href}
                   className="text-gray-400 hover:text-primary-400 transition-colors duration-200"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <span className="sr-only">{item.name}</span>
                   <item.icon className="h-6 w-6" aria-hidden="true" />
@@ -136,7 +157,7 @@ export default function Footer() {
               ))}
             </div>
             <p className="text-gray-400 text-sm">
-              © {new Date().getFullYear()} Refugee Young Adults (PWDs). All rights reserved.
+              © {new Date().getFullYear()} RYD Mental Health. All rights reserved.
             </p>
           </div>
         </div>

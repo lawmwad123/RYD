@@ -10,7 +10,8 @@ import {
   GraduationCap, 
   Shield, 
   ArrowRight,
-  CheckCircle2
+  CheckCircle2,
+  Phone
 } from 'lucide-react';
 import Link from 'next/link';
 import Navbar from '../components/Navbar';
@@ -18,28 +19,46 @@ import Footer from '../components/Footer';
 
 const services = [
   {
-    title: 'Mental Health Support',
-    description: 'Professional counseling and therapy services tailored to your unique needs.',
+    title: 'Individual Counseling',
+    description: 'One-on-one therapy sessions tailored to your unique needs and concerns.',
     icon: Brain,
     features: [
-      'Individual Counseling',
-      'Group Therapy Sessions',
-      'Crisis Intervention',
-      'Trauma Support'
+      'Personalized treatment approach',
+      'Confidential sessions',
+      'Experienced counselors',
+      'Flexible scheduling'
     ],
+    action: 'Schedule a Session',
+    actionLink: 'https://wa.me/256726204045',
     color: 'primary'
   },
   {
-    title: 'Community Programs',
-    description: 'Join supportive communities and connect with others on similar journeys.',
+    title: 'Group Therapy',
+    description: 'Join supportive groups led by professionals to connect and heal together.',
     icon: Users,
     features: [
-      'Support Groups',
-      'Peer Mentoring',
-      'Community Events',
-      'Social Activities'
+      'Peer support environment',
+      'Shared experiences',
+      'Professional facilitation',
+      'Community building'
     ],
+    action: 'Join a Group',
+    actionLink: '/contact',
     color: 'secondary'
+  },
+  {
+    title: 'Crisis Support',
+    description: 'Immediate assistance when you need it most, available 24/7.',
+    icon: Phone,
+    features: [
+      'Immediate response',
+      'Trained professionals',
+      'Confidential support',
+      'Follow-up resources'
+    ],
+    action: 'Get Help Now',
+    actionLink: 'https://wa.me/256726204045',
+    color: 'red'
   },
   {
     title: 'Educational Resources',
@@ -51,19 +70,9 @@ const services = [
       'Resource Library',
       'Mental Health Guides'
     ],
+    action: 'Browse Resources',
+    actionLink: '/resources',
     color: 'purple'
-  },
-  {
-    title: 'Wellness Coaching',
-    description: 'Personalized guidance for your mental and emotional well-being journey.',
-    icon: Heart,
-    features: [
-      'Personal Development Plans',
-      'Lifestyle Coaching',
-      'Stress Management',
-      'Wellness Strategies'
-    ],
-    color: 'pink'
   }
 ];
 
@@ -117,10 +126,12 @@ const ServiceCard = ({ service, index }: { service: typeof services[0], index: n
           ))}
         </ul>
         <Link
-          href={`/services/${service.title.toLowerCase().replace(/\s+/g, '-')}`}
+          href={service.actionLink}
           className="inline-flex items-center mt-6 text-primary-600 hover:text-primary-700 font-medium group"
+          target={service.actionLink.startsWith('http') ? '_blank' : '_self'}
+          rel={service.actionLink.startsWith('http') ? 'noopener noreferrer' : ''}
         >
-          Learn More
+          {service.action}
           <ArrowRight className="ml-2 h-5 w-5 transform group-hover:translate-x-1 transition-transform" />
         </Link>
       </div>

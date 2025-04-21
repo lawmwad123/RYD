@@ -23,7 +23,7 @@ const contactMethods = [
     icon: Phone,
     color: "text-blue-600",
     bgColor: "bg-blue-100",
-    contact: "+256 709 039 595 / +256 776 803262",
+    contact: "+256 709 039595 / +256 776 803262",
   },
   {
     title: "Email",
@@ -31,11 +31,11 @@ const contactMethods = [
     icon: Mail,
     color: "text-purple-600",
     bgColor: "bg-purple-100",
-    contact: "support@ryd.org",
+    contact: "info@rydmentalhealth.org",
   },
   {
     title: "Office Hours",
-    description: "Visit our office in Hoima",
+    description: "Visit our office in Namugongo",
     icon: Clock,
     color: "text-green-600",
     bgColor: "bg-green-100",
@@ -43,7 +43,7 @@ const contactMethods = [
   },
   {
     title: "Location",
-    description: "Bujumbura, Hoima City, Uganda",
+    description: "Namugongo, Wakiso, Uganda",
     icon: MapPin,
     color: "text-red-600",
     bgColor: "bg-red-100",
@@ -80,19 +80,34 @@ const ContactMethodCard = ({ method, index }: { method: typeof contactMethods[0]
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
     >
-      <div className={`p-3 rounded-xl bg-${method.color} text-${method.color} inline-block mb-4`}>
+      <div className={`p-3 rounded-xl ${method.bgColor} ${method.color} inline-block mb-4`}>
         <Icon className="h-6 w-6" />
       </div>
       <h3 className="text-xl font-semibold text-gray-900 mb-2">{method.title}</h3>
       <p className="text-gray-600 mb-4">{method.description}</p>
       <p className="text-lg font-medium text-gray-900 mb-4">{method.contact}</p>
-      <a
-        href={`tel:${method.contact.split('/')[0]}`}
-        className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium group"
-      >
-        Call Now
-        <ArrowRight className="ml-2 h-5 w-5 transform group-hover:translate-x-1 transition-transform" />
-      </a>
+      {method.title === "Phone Support" ? (
+        <a
+          href="tel:+256709039595"
+          className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium group"
+        >
+          Call Now
+          <ArrowRight className="ml-2 h-5 w-5 transform group-hover:translate-x-1 transition-transform" />
+        </a>
+      ) : method.title === "Email" ? (
+        <a
+          href="mailto:info@rydmentalhealth.org"
+          className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium group"
+        >
+          Email Us
+          <ArrowRight className="ml-2 h-5 w-5 transform group-hover:translate-x-1 transition-transform" />
+        </a>
+      ) : (
+        <div className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium group">
+          {method.title === "Location" ? "Get Directions" : "Learn More"}
+          <ArrowRight className="ml-2 h-5 w-5 transform group-hover:translate-x-1 transition-transform" />
+        </div>
+      )}
     </motion.div>
   );
 };
@@ -302,8 +317,8 @@ export default function ContactPage() {
                     <MapPin className="h-6 w-6 text-primary-600 mt-1" />
                     <div>
                       <p className="text-gray-600">
-                      Bujumbura<br />
-                      Hoima City,<br />
+                      Namugongo<br />
+                      Wakiso,<br />
                          Uganda
                       </p>
                     </div>

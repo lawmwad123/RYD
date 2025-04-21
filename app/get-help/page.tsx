@@ -20,31 +20,31 @@ import Footer from '../components/Footer';
 
 const supportOptions = [
   {
-    title: '24/7 Crisis Support',
+    title: 'Crisis Support',
     description: 'Immediate assistance for those in crisis. Our trained professionals are here to help.',
     icon: Phone,
     color: 'red',
-    action: 'Call Now',
-    href: 'tel:+1234567890',
+    action: 'WhatsApp Now',
+    href: 'https://wa.me/256726204045',
     details: 'Available 24/7 • Free & Confidential'
   },
   {
     title: 'Online Chat Support',
-    description: 'Connect with a counselor through our secure online chat platform.',
+    description: 'Connect with a counselor through our secure WhatsApp platform.',
     icon: MessageSquare,
     color: 'blue',
     action: 'Start Chat',
-    href: '/chat',
+    href: 'https://wa.me/256726204045',
     details: 'Mon-Fri 9am-6pm • Immediate Response'
   },
   {
-    title: 'Emergency Services',
-    description: 'Immediate access to emergency mental health services and crisis intervention.',
+    title: 'Call Support',
+    description: 'Speak directly with our team for guidance and support.',
     icon: Clock,
     color: 'orange',
-    action: 'Get Help',
-    href: '/emergency',
-    details: '24/7 Emergency Response • Local Support'
+    action: 'Call Now',
+    href: 'tel:+256709039595',
+    details: 'Mon-Fri 9am-5pm • Professional Support'
   }
 ];
 
@@ -58,8 +58,10 @@ const supportPrograms = [
       'Personalized treatment plans',
       'Flexible scheduling',
       'Online or in-person sessions',
-      'Sliding scale fees available'
-    ]
+      'Professional guidance'
+    ],
+    action: 'Schedule a Session',
+    href: 'https://wa.me/256726204045'
   },
   {
     title: 'Group Therapy',
@@ -71,19 +73,23 @@ const supportPrograms = [
       'Skill-building workshops',
       'Topic-specific sessions',
       'Professional facilitation'
-    ]
+    ],
+    action: 'Join a Group',
+    href: '/contact'
   },
   {
-    title: 'Wellness Programs',
-    description: 'Comprehensive programs focused on mental and emotional well-being.',
+    title: 'Community Support',
+    description: 'Join our community for ongoing support and connection.',
     icon: Heart,
     color: 'purple',
     features: [
-      'Stress management',
-      'Mindfulness training',
-      'Lifestyle coaching',
-      'Holistic approaches'
-    ]
+      'Regular meetups',
+      'Shared experiences',
+      'Resource sharing',
+      'Long-term support'
+    ],
+    action: 'Get Involved',
+    href: '/contact'
   }
 ];
 
@@ -112,10 +118,12 @@ const ProgramCard = ({ program, index }: { program: typeof supportPrograms[0], i
         ))}
       </ul>
       <Link
-        href={`/programs/${program.title.toLowerCase().replace(/\s+/g, '-')}`}
+        href={program.href}
         className="inline-flex items-center mt-6 text-primary-600 hover:text-primary-700 font-medium group"
+        target={program.href.startsWith('http') ? '_blank' : '_self'}
+        rel={program.href.startsWith('http') ? 'noopener noreferrer' : ''}
       >
-        Learn More
+        {program.action}
         <ArrowRight className="ml-2 h-5 w-5 transform group-hover:translate-x-1 transition-transform" />
       </Link>
     </motion.div>
