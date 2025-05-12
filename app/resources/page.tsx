@@ -10,7 +10,6 @@ import {
   Users, 
   Brain, 
   Heart, 
-  Download,
   Play,
   ArrowRight,
   Search,
@@ -120,7 +119,7 @@ const ResourceCard = ({ resource, index }: { resource: typeof featuredResources[
           {resource.type === 'Video' ? (
             <Play className="h-12 w-12 text-white" />
           ) : (
-            <Download className="h-12 w-12 text-white" />
+            <FileText className="h-12 w-12 text-white" />
           )}
         </div>
       </div>
@@ -133,9 +132,11 @@ const ResourceCard = ({ resource, index }: { resource: typeof featuredResources[
         <p className="text-gray-600 mb-4">{resource.description}</p>
         <a
           href={resource.downloadUrl}
+          target="_blank"
+          rel="noopener noreferrer"
           className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium group"
         >
-          {resource.type === 'Video' ? 'Watch Now' : 'Download'}
+          {resource.type === 'Video' ? 'Watch Now' : 'View Resource'}
           <ArrowRight className="ml-2 h-5 w-5 transform group-hover:translate-x-1 transition-transform" />
         </a>
       </div>

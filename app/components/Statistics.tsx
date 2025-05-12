@@ -3,13 +3,13 @@
 import { useEffect, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Users, Heart, DollarSign, TrendingUp } from 'lucide-react';
+import { Users, Heart, Calendar, TrendingUp } from 'lucide-react';
 
 const stats = [
   {
     id: 1,
     name: 'People Helped',
-    value: 2500,
+    value: 1000,
     icon: Users,
     prefix: '',
     suffix: '+',
@@ -17,18 +17,20 @@ const stats = [
   {
     id: 2,
     name: 'Volunteers',
-    value: 150,
+    value: 20,
     icon: Heart,
     prefix: '',
     suffix: '+',
   },
   {
     id: 3,
-    name: 'Donations',
-    value: 500000,
-    icon: DollarSign,
-    prefix: '$',
+    name: 'Years of Service',
+    value: 2024,
+    description: 'Founded in 2024',
+    icon: Calendar,
+    prefix: '',
     suffix: '',
+    isYear: true,
   },
   {
     id: 4,
@@ -40,13 +42,18 @@ const stats = [
   },
 ];
 
-const Counter = ({ value, prefix = '', suffix = '' }: { value: number; prefix?: string; suffix?: string }) => {
+const Counter = ({ value, prefix = '', suffix = '', isYear = false }: { value: number; prefix?: string; suffix?: string; isYear?: boolean }) => {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
 
   useEffect(() => {
     if (isInView) {
+      if (isYear) {
+        setCount(value);
+        return;
+      }
+      
       const duration = 2000; // 2 seconds
       const steps = 60;
       const increment = value / steps;
@@ -65,7 +72,7 @@ const Counter = ({ value, prefix = '', suffix = '' }: { value: number; prefix?: 
 
       return () => clearInterval(timer);
     }
-  }, [isInView, value]);
+  }, [isInView, value, isYear]);
 
   return (
     <span ref={ref} className="text-4xl font-bold text-gray-900">
@@ -106,8 +113,9 @@ const Statistics = () => {
               <div className="flex justify-center mb-4">
                 <stat.icon className="h-8 w-8 text-primary-600" />
               </div>
-              <Counter value={stat.value} prefix={stat.prefix} suffix={stat.suffix} />
+              <Counter value={stat.value} prefix={stat.prefix} suffix={stat.suffix} isYear={stat.isYear} />
               <h3 className="mt-2 text-lg font-medium text-gray-900">{stat.name}</h3>
+              {stat.description && <p className="mt-1 text-sm text-gray-500">{stat.description}</p>}
             </motion.div>
           ))}
         </div>

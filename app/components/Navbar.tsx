@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Services', href: '/services' },
+  { name: 'Programs', href: '/programs' },
   { name: 'Resources', href: '/resources' },
   { name: 'Gallery', href: '/gallery' },
   { name: 'About', href: '/about' },
@@ -46,10 +47,10 @@ const Navbar = () => {
               </Link>
             ))}
             <Link
-              href="/donate"
-              className="btn btn-primary px-4 py-2"
+              href="/programs/write-to-restore"
+              className="btn btn-outline px-4 py-2 text-primary-600 border border-primary-600 hover:bg-primary-50"
             >
-              Donate
+              Write to Restore
             </Link>
             <Link
               href="/donate"
@@ -96,11 +97,11 @@ const Navbar = () => {
                 </Link>
               ))}
               <Link
-                href="/donate"
-                className="block px-3 py-2 text-white bg-primary-600 hover:bg-primary-700 rounded-md"
+                href="/programs/write-to-restore"
+                className="block px-3 py-2 text-primary-600 bg-primary-50 hover:bg-primary-100 rounded-md"
                 onClick={() => setIsOpen(false)}
               >
-                Donate
+                Write to Restore
               </Link>
               <Link
                 href="/donate"

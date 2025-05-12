@@ -124,7 +124,8 @@ export default function Footer() {
                 <MapPin className="h-5 w-5 text-primary-400 mt-1" />
                 <span className="text-gray-400">
                 Namugongo,<br />
-                Wakiso, Uganda
+                Wakiso, Uganda<br />
+                P.O. Box 187215 Kampala GPO
                 </span>
               </li>
               <li className="flex items-center space-x-3">
