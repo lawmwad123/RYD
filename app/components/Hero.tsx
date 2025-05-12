@@ -52,13 +52,13 @@ const Hero = () => {
                   Get Help
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
-                <Link
+                {/* <Link
                   href="/donate"
                   className="inline-flex items-center justify-center px-8 py-3 border-2 border-primary-600 text-base font-medium rounded-full text-primary-600 bg-transparent hover:bg-primary-50 transition-all duration-300"
                 >
                   Donate
                   <Heart className="ml-2 h-5 w-5" />
-                </Link>
+                </Link> */}
               </div>
             </motion.div>
 
