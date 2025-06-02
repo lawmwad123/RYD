@@ -34,67 +34,136 @@ declare module "next-auth/jwt" {
   }
 }
 
-// Determine environment settings
-const useSecureCookie = process.env.NODE_ENV === "production";
-const isDevelopment = process.env.NODE_ENV === "development";
+// Environment detection
+const isProduction = process.env.NODE_ENV === "production";
 const isVercel = !!process.env.VERCEL;
-const isLocalhost = process.env.NEXTAUTH_URL?.includes("localhost") || process.env.AUTH_URL?.includes("localhost") || !process.env.VERCEL;
+const isDevelopment = process.env.NODE_ENV === "development";
 
-// For CSRF handling, treat localhost as development even in production builds
-const isLocalDevelopment = isDevelopment || isLocalhost;
-
-// Get the correct URL for production/development
+// Get the correct URL for the environment
 const getAuthUrl = () => {
-  if (isDevelopment) return "http://localhost:3000";
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-  if (process.env.AUTH_URL) return process.env.AUTH_URL;
-  if (process.env.NEXTAUTH_URL) return process.env.NEXTAUTH_URL;
-  return "http://localhost:3000";
+  // In production, prioritize AUTH_URL, then NEXTAUTH_URL
+  if (isProduction) {
+    if (process.env.AUTH_URL) return process.env.AUTH_URL;
+    if (process.env.NEXTAUTH_URL) return process.env.NEXTAUTH_URL;
+    if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  }
+  
+  // Development fallback
+  return process.env.NEXTAUTH_URL || "http://localhost:3000";
 };
+
+// Get the secret with proper fallback
+const getAuthSecret = () => {
+  const secret = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET;
+  
+  if (!secret) {
+    if (isProduction) {
+      throw new Error("AUTH_SECRET is required in production");
+    }
+    console.warn("[Auth] No AUTH_SECRET found, using default for development");
+    return "development-secret-change-in-production";
+  }
+  
+  return secret;
+};
+
+const authUrl = getAuthUrl();
+const authSecret = getAuthSecret();
 
 // Configure authentication with proper production settings
 export const authConfig: NextAuthConfig = {
   debug: process.env.NEXTAUTH_DEBUG === "true",
   basePath: "/api/auth",
+  
   pages: {
     signIn: "/login",
     error: "/auth/error",
   },
+  
   adapter: PrismaAdapter(prisma),
+  
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
     updateAge: 24 * 60 * 60, // 24 hours
   },
-  // Important: Trust host in production for Vercel
+  
+  // Critical: Trust host in production and set secret
   trustHost: true,
+  secret: authSecret,
   
-  // Use AUTH_SECRET instead of NEXTAUTH_SECRET in production
-  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
+  // Enhanced cookie configuration for production
+  useSecureCookies: isProduction,
   
-  // Enable advanced features for production
-  experimental: {
-    enableWebAuthn: false,
+  cookies: {
+    sessionToken: {
+      name: isProduction ? "__Secure-next-auth.session-token" : "next-auth.session-token",
+      options: {
+        httpOnly: true,
+        sameSite: isProduction ? "lax" : "lax", // Always use 'lax' for better compatibility
+        path: "/",
+        secure: isProduction,
+        domain: isProduction && isVercel ? undefined : undefined, // Let the browser handle this
+      },
+    },
+    callbackUrl: {
+      name: isProduction ? "__Secure-next-auth.callback-url" : "next-auth.callback-url",
+      options: {
+        httpOnly: true,
+        sameSite: isProduction ? "lax" : "lax",
+        path: "/",
+        secure: isProduction,
+        domain: isProduction && isVercel ? undefined : undefined,
+      },
+    },
+    csrfToken: {
+      name: isProduction ? "__Host-next-auth.csrf-token" : "next-auth.csrf-token",
+      options: {
+        httpOnly: true,
+        sameSite: "lax", // Critical: Use 'lax' for CSRF tokens
+        path: "/",
+        secure: isProduction,
+        // Don't set domain for __Host- prefixed cookies
+      },
+    },
+    state: {
+      name: isProduction ? "__Secure-next-auth.state" : "next-auth.state",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: isProduction,
+        maxAge: 15 * 60, // 15 minutes
+        domain: isProduction && isVercel ? undefined : undefined,
+      },
+    },
+    pkceCodeVerifier: {
+      name: isProduction ? "__Secure-next-auth.pkce.code_verifier" : "next-auth.pkce.code_verifier",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: isProduction,
+        maxAge: 15 * 60, // 15 minutes
+        domain: isProduction && isVercel ? undefined : undefined,
+      },
+    },
   },
-  
-  // Configure for production CSRF handling
-  useSecureCookies: useSecureCookie,
-  
+
+  // Enhanced logger for better debugging
   logger: {
     error(error: Error) {
-      // Handle CSRF errors more gracefully
       if (error.message?.includes("CSRF")) {
-        if (isLocalDevelopment) {
-          console.log("[Auth] CSRF error ignored in local development mode (including localhost production builds)");
-          return;
-        } else {
-          console.error("[Auth] CSRF error in production:", error.message);
-          console.error("[Auth] This usually indicates:");
-          console.error("  - Missing CSRF token in the request");
-          console.error("  - Incorrect cookie configuration");
-          console.error("  - Cross-domain cookie issues");
-          console.error("  - Missing or incorrect AUTH_SECRET");
-        }
+        console.error("[Auth] CSRF Error Details:", {
+          message: error.message,
+          stack: error.stack,
+          environment: process.env.NODE_ENV,
+          authUrl: authUrl,
+          hasSecret: !!authSecret,
+          isProduction,
+          isVercel,
+          userAgent: process.env.HTTP_USER_AGENT || "unknown"
+        });
       } else {
         console.error(`[Auth] Error:`, error);
       }
@@ -108,60 +177,7 @@ export const authConfig: NextAuthConfig = {
       }
     },
   },
-  cookies: {
-    sessionToken: {
-      name: `${useSecureCookie ? "__Secure-" : ""}next-auth.session-token`,
-      options: {
-        httpOnly: true,
-        sameSite: (useSecureCookie && !isLocalhost) ? "none" : "lax", // Use "lax" for localhost even in production
-        path: "/",
-        secure: useSecureCookie && !isLocalhost, // Don't require HTTPS for localhost
-        domain: isVercel && useSecureCookie ? `.${process.env.VERCEL_URL?.replace('https://', '')}` : undefined,
-      },
-    },
-    callbackUrl: {
-      name: `${useSecureCookie ? "__Secure-" : ""}next-auth.callback-url`,
-      options: {
-        httpOnly: true,
-        sameSite: (useSecureCookie && !isLocalhost) ? "none" : "lax",
-        path: "/",
-        secure: useSecureCookie && !isLocalhost,
-        domain: isVercel && useSecureCookie ? `.${process.env.VERCEL_URL?.replace('https://', '')}` : undefined,
-      },
-    },
-    csrfToken: {
-      name: `${useSecureCookie ? "__Secure-" : ""}next-auth.csrf-token`,
-      options: {
-        httpOnly: true,
-        sameSite: (useSecureCookie && !isLocalhost) ? "none" : "lax",
-        path: "/",
-        secure: useSecureCookie && !isLocalhost,
-        domain: isVercel && useSecureCookie ? `.${process.env.VERCEL_URL?.replace('https://', '')}` : undefined,
-      },
-    },
-    state: {
-      name: `${useSecureCookie ? "__Secure-" : ""}next-auth.state`,
-      options: {
-        httpOnly: true,
-        sameSite: (useSecureCookie && !isLocalhost) ? "none" : "lax",
-        path: "/",
-        secure: useSecureCookie && !isLocalhost,
-        maxAge: 15 * 60, // 15 minutes
-        domain: isVercel && useSecureCookie ? `.${process.env.VERCEL_URL?.replace('https://', '')}` : undefined,
-      },
-    },
-    pkceCodeVerifier: {
-      name: `${useSecureCookie ? "__Secure-" : ""}next-auth.pkce.code_verifier`,
-      options: {
-        httpOnly: true,
-        sameSite: (useSecureCookie && !isLocalhost) ? "none" : "lax",
-        path: "/",
-        secure: useSecureCookie && !isLocalhost,
-        maxAge: 15 * 60, // 15 minutes
-        domain: isVercel && useSecureCookie ? `.${process.env.VERCEL_URL?.replace('https://', '')}` : undefined,
-      },
-    },
-  },
+
   callbacks: {
     async jwt({ token, user, account, trigger }) {
       // Include user role and status in the JWT token when it's available
@@ -184,7 +200,7 @@ export const authConfig: NextAuthConfig = {
       const shouldRefresh = 
         trigger === 'update' || 
         !token.lastRefresh || 
-        Date.now() - (token.lastRefresh as number) > 5 * 60 * 1000; // 5 minutes
+        Date.now() - (token.lastRefresh as number) > 5 * 60 * 1000;
       
       if (shouldRefresh && token.id) {
         try {
@@ -218,6 +234,7 @@ export const authConfig: NextAuthConfig = {
       console.log("[Auth] JWT token generated:", token.email, "with role:", token.role, "and status:", token.status);
       return token;
     },
+    
     async session({ session, token }) {
       // Make ID, role, and status available on the client-side
       if (session.user && token) {
@@ -232,15 +249,13 @@ export const authConfig: NextAuthConfig = {
       console.log("[Auth] Session created/updated:", session?.user?.email, "status:", session?.user?.status);
       return session;
     },
+    
     async signIn({ user, account, profile, email, credentials }) {
-      // In local development (including localhost production builds), always allow sign in to bypass CSRF checks
-      if (isLocalDevelopment) {
-        console.log("[Auth] Sign in callback - allowing authentication in local development mode");
-        return true;
-      }
-      
-      // In production, perform proper validation
-      console.log("[Auth] Sign in callback - validating authentication in production mode");
+      console.log("[Auth] Sign in callback - attempting authentication", {
+        provider: account?.provider,
+        userEmail: user?.email,
+        environment: process.env.NODE_ENV
+      });
       
       // Allow OAuth providers (they handle CSRF internally)
       if (account?.provider && account.provider !== 'credentials') {
@@ -257,6 +272,7 @@ export const authConfig: NextAuthConfig = {
       console.log("[Auth] Sign in denied - invalid authentication attempt");
       return false;
     },
+    
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const isOnDashboard = nextUrl.pathname.startsWith("/dashboard");
@@ -340,7 +356,8 @@ export const authConfig: NextAuthConfig = {
       // Allow all other requests
       return true;
     },
-    // Improved redirect callback to prevent loops
+    
+    // Enhanced redirect callback to handle production URLs
     redirect({ url, baseUrl }) {
       console.log("[Auth] Redirect callback:", { url, baseUrl });
       
@@ -369,6 +386,7 @@ export const authConfig: NextAuthConfig = {
       return baseUrl;
     }
   },
+  
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || "",
@@ -431,6 +449,7 @@ export const authConfig: NextAuthConfig = {
       },
     }),
   ],
+  
   events: {
     async signIn(message) {
       console.log("[Auth] User signed in:", message.user.email);
