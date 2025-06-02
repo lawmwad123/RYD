@@ -10,7 +10,9 @@ import {
   CheckCircle2,
   BookOpen,
   Globe,
-  Calendar
+  Calendar,
+  LogIn,
+  UserPlus
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -205,6 +207,89 @@ export default function VolunteerPage() {
                 <BenefitCard key={benefit.title} benefit={benefit} index={index} />
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* Get Started Section */}
+        <section className="py-20 bg-gradient-to-r from-primary-50 to-secondary-50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="text-center max-w-4xl mx-auto"
+            >
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                Ready to Join Our Team?
+              </h2>
+              <p className="text-xl text-gray-600 mb-12">
+                Whether you're new to our organization or returning volunteer, we have options for you.
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
+                {/* New Volunteers */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  <div className="p-4 rounded-xl bg-primary-100 text-primary-600 inline-block mb-6">
+                    <UserPlus className="h-8 w-8" />
+                  </div>
+                  <h3 className="text-2xl font-semibold text-gray-900 mb-4">New Volunteer</h3>
+                  <p className="text-gray-600 mb-6">
+                    First time joining us? Create your volunteer account and get started with our onboarding process.
+                  </p>
+                  <Link
+                    href="/signup"
+                    className="inline-flex items-center justify-center w-full px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors duration-300"
+                  >
+                    <UserPlus className="mr-2 h-5 w-5" />
+                    Sign Up to Volunteer
+                  </Link>
+                </motion.div>
+
+                {/* Returning Volunteers */}
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                  className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  <div className="p-4 rounded-xl bg-secondary-100 text-secondary-600 inline-block mb-6">
+                    <LogIn className="h-8 w-8" />
+                  </div>
+                  <h3 className="text-2xl font-semibold text-gray-900 mb-4">Returning Volunteer</h3>
+                  <p className="text-gray-600 mb-6">
+                    Already part of our team? Access your volunteer dashboard to view assignments and schedule.
+                  </p>
+                  <Link
+                    href="/login"
+                    className="inline-flex items-center justify-center w-full px-6 py-3 bg-secondary-600 text-white rounded-lg hover:bg-secondary-700 transition-colors duration-300"
+                  >
+                    <LogIn className="mr-2 h-5 w-5" />
+                    Login to Dashboard
+                  </Link>
+                </motion.div>
+              </div>
+
+              <div className="mt-12 text-center">
+                <p className="text-gray-600 mb-4">
+                  Have questions about volunteering with us?
+                </p>
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium"
+                >
+                  Contact our volunteer coordinator
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </div>
+            </motion.div>
           </div>
         </section>
 

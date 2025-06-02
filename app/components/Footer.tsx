@@ -29,13 +29,14 @@ const navigation = {
     { name: 'Get Help', href: '/get-help' },
     { name: 'About', href: '/about' },
     { name: 'Contact', href: '/contact' },
+    { name: 'Join Our Team', href: '/signup' },
   ],
   support: [
     { name: 'FAQ', href: '/faq' },
     { name: 'Resources', href: '/resources' },
     { name: 'Privacy Policy', href: '/privacy' },
     { name: 'Terms of Service', href: '/terms' },
-    { name: 'Volunteer With Us', href: '/volunteer' },
+    { name: 'Staff Portal', href: '/login' },
   ],
   social: [
     {

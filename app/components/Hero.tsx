@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, Heart, Users, BookOpen, Sparkles } from 'lucide-react';
+import { ArrowRight, Heart, Users, BookOpen, Sparkles, UserPlus } from 'lucide-react';
 
 const Hero = () => {
   return (
@@ -51,6 +51,13 @@ const Hero = () => {
                 >
                   Get Help
                   <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+                <Link
+                  href="/volunteer"
+                  className="inline-flex items-center justify-center px-8 py-3 border-2 border-secondary-600 text-base font-medium rounded-full text-secondary-600 bg-transparent hover:bg-secondary-50 transition-all duration-300"
+                >
+                  <UserPlus className="mr-2 h-5 w-5" />
+                  Join Our Team
                 </Link>
                 {/* <Link
                   href="/donate"

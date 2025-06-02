@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, Users } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const navigation = [
@@ -51,6 +51,13 @@ const Navbar = () => {
               className="btn btn-outline px-4 py-2 text-primary-600 border border-primary-600 hover:bg-primary-50"
             >
               Write to Restore
+            </Link>
+            <Link
+              href="/login"
+              className="inline-flex items-center px-4 py-2 text-sm font-medium text-secondary-600 bg-secondary-50 hover:bg-secondary-100 rounded-lg transition-colors"
+            >
+              <Users className="h-4 w-4 mr-2" />
+              Staff Login
             </Link>
             <Link
               href="/donate"
@@ -102,6 +109,14 @@ const Navbar = () => {
                 onClick={() => setIsOpen(false)}
               >
                 Write to Restore
+              </Link>
+              <Link
+                href="/login"
+                className="flex items-center px-3 py-2 text-secondary-600 bg-secondary-50 hover:bg-secondary-100 rounded-md"
+                onClick={() => setIsOpen(false)}
+              >
+                <Users className="h-4 w-4 mr-2" />
+                Staff Login
               </Link>
               <Link
                 href="/donate"
