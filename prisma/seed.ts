@@ -14,7 +14,7 @@ async function main() {
   
   if (!existingAdmin) {
     // Create a default admin user
-    const adminPassword = await hashPassword('geniusmind!');
+    const adminPassword = await hashPassword('geniusmind');
     
     const admin = await prisma.user.create({
       data: {

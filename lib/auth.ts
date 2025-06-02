@@ -57,7 +57,7 @@ export const authConfig: NextAuthConfig = {
   debug: process.env.NEXTAUTH_DEBUG === "true",
   basePath: "/api/auth",
   pages: {
-    signIn: "/auth/signin",
+    signIn: "/login",
     error: "/auth/error",
   },
   adapter: PrismaAdapter(prisma),
