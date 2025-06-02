@@ -8,8 +8,18 @@ export const metadata: Metadata = {
   description: "Create a new account for RYD Admin dashboard",
 }
 
+// Make this page dynamic to avoid static generation issues
+export const dynamic = 'force-dynamic'
+
 export default async function SignupPage() {
-  const session = await auth()
+  let session = null;
+  
+  try {
+    session = await auth();
+  } catch (error) {
+    console.error("[Signup Page] Auth error:", error);
+    // Continue without session - show signup form
+  }
   
   // If the user is already logged in, redirect to dashboard
   if (session?.user) {
