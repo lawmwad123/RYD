@@ -4,77 +4,67 @@ import { hashPassword } from '../lib/server/bcrypt';
 const prisma = new PrismaClient();
 
 async function main() {
-  // Default admin credentials
-  const adminEmail = 'lawmwad@gmail.com';
-  
+  // Admin users to create
+  const adminUsers = [
+    {
+      email: 'augustus.twinemugabe@rydmentalhealth.org',
+      firstName: 'Augustus',
+      lastName: 'Twinemugabe',
+      name: 'Augustus Twinemugabe',
+      password: 'geniusmind',
+      jobTitle: 'System Administrator',
+      department: 'IT',
+    },
+    {
+      email: 'shalom.omondo@rydmentalhealth.org',
+      firstName: 'Shalom',
+      lastName: 'Omondo',
+      name: 'Shalom Omondo',
+      password: 'geniusmind',
+      jobTitle: 'Administrator',
+      department: 'Management',
+    }
+  ];
+
+  // Create admin users
+  for (const adminData of adminUsers) {
   // Check if admin already exists
   const existingAdmin = await prisma.user.findUnique({
-    where: { email: adminEmail },
+      where: { email: adminData.email },
   });
   
   if (!existingAdmin) {
-    // Create a default admin user
-    const adminPassword = await hashPassword('geniusmind');
+      // Create admin user
+      const adminPassword = await hashPassword(adminData.password);
     
     const admin = await prisma.user.create({
       data: {
-        firstName: 'Mawanda',
-        lastName: 'Lawrence',
-        name: 'Mawanda Lawrence',
-        email: adminEmail,
+          firstName: adminData.firstName,
+          lastName: adminData.lastName,
+          name: adminData.name,
+          email: adminData.email,
         password: adminPassword,
         role: UserRole.SUPER_ADMIN,
         status: UserStatus.ACTIVE,
         approvedAt: new Date(),
-        jobTitle: 'System Administrator',
-        department: 'IT',
+          jobTitle: adminData.jobTitle,
+          department: adminData.department,
         weeklyHours: 40,
       },
     });
     
-    console.log(`Created admin user with email: ${admin.email}`);
+      console.log(`✅ Created admin user: ${admin.email} (${admin.name})`);
   } else {
-    console.log('Admin user already exists, skipping creation');
+      console.log(`ℹ️  Admin user already exists: ${adminData.email}`);
+    }
   }
 
-  // Create sample volunteer user (pending approval)
-  const volunteerEmail = 'volunteer@example.com';
-  const existingVolunteer = await prisma.user.findUnique({
-    where: { email: volunteerEmail },
-  });
-
-  if (!existingVolunteer) {
-    const volunteerPassword = await hashPassword('Volunteer123!');
-    
-    const volunteer = await prisma.user.create({
-      data: {
-        firstName: 'Jane',
-        lastName: 'Volunteer',
-        name: 'Jane Volunteer',
-        email: volunteerEmail,
-        password: volunteerPassword,
-        role: UserRole.VOLUNTEER,
-        status: UserStatus.PENDING, // Requires admin approval
-        jobTitle: 'Mental Health Champion',
-        department: 'Community Outreach',
-        location: 'Kampala',
-        district: 'Kampala',
-        region: 'Central',
-        phone: '+256700000000',
-        skills: 'Counseling, Community Mobilization',
-        weeklyHours: 20,
-      },
-    });
-    
-    console.log(`Created volunteer user with email: ${volunteer.email} (status: ${volunteer.status})`);
-  } else {
-    console.log('Volunteer user already exists, skipping creation');
-  }
+  console.log('\n🎉 Seed completed successfully!');
 }
 
 main()
   .catch((e) => {
-    console.error(e);
+    console.error('❌ Seed failed:', e);
     process.exit(1);
   })
   .finally(async () => {

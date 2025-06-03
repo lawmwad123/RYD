@@ -158,9 +158,22 @@ export default function Footer() {
                 </Link>
               ))}
             </div>
-            <p className="text-gray-400 text-sm">
-              © {new Date().getFullYear()} RYD Mental Health. All rights reserved.
-            </p>
+            <div>
+              <p className="text-gray-400 text-sm">
+                © {new Date().getFullYear()} RYD Mental Health. All rights reserved.
+              </p>
+              <p className="text-gray-400 text-sm">
+                Built with ❤️ by{' '}
+                <a 
+                  href="https://lawmwad.vercel.app/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:text-primary-400 transition-colors duration-200"
+                >
+                  LAWMWAD TECHNOLOGIES
+                </a>
+              </p>
+            </div>
           </div>
         </div>
       </div>

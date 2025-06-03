@@ -43,8 +43,8 @@ const isDevelopment = process.env.NODE_ENV === "development";
 const getAuthUrl = () => {
   // In production, prioritize AUTH_URL, then NEXTAUTH_URL
   if (isProduction) {
-    if (process.env.AUTH_URL) return process.env.AUTH_URL;
-    if (process.env.NEXTAUTH_URL) return process.env.NEXTAUTH_URL;
+  if (process.env.AUTH_URL) return process.env.AUTH_URL;
+  if (process.env.NEXTAUTH_URL) return process.env.NEXTAUTH_URL;
     if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
   }
   

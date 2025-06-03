@@ -236,6 +236,17 @@ export function LoginForm({
         By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
         and <a href="#">Privacy Policy</a>.
       </div>
+      <div className="text-balance text-center text-xs text-muted-foreground">
+        Built by{' '}
+        <a 
+          href="https://lawmwad.vercel.app/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="hover:text-primary transition-colors duration-200"
+        >
+          LAWMWAD TECHNOLOGIES
+        </a>
+      </div>
     </div>
   )
 }
