@@ -14,6 +14,10 @@ export interface DashboardStats {
   activeProjects: number
   completedProjects: number
   
+  // User-specific fields (for non-admin users)
+  myTeams?: number
+  myActiveTeams?: number
+  
   recentActivity: {
     tasksCompleted: number
     newRegistrations: number

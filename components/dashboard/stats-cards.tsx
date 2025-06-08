@@ -12,9 +12,12 @@ import {
   AlertTriangle,
   UserPlus,
   Calendar,
-  TrendingUp
+  TrendingUp,
+  Shield,
+  Target
 } from "lucide-react"
 import { useDashboardStats } from "@/lib/hooks/use-dashboard-stats"
+import { usePermissions } from "@/lib/hooks/usePermissions"
 import { cn } from "@/lib/utils"
 
 interface StatCardProps {
@@ -89,6 +92,7 @@ function StatCardSkeleton() {
 
 export function StatsCards() {
   const { data: stats, isLoading, error } = useDashboardStats()
+  const { isAdmin, isStaffOrAbove } = usePermissions()
 
   if (isLoading) {
     return (
@@ -119,72 +123,142 @@ export function StatsCards() {
     ? Math.round((stats.completedTasks / stats.totalTasks) * 100)
     : 0
 
-  return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      {/* Tasks Overview */}
-      <StatCard
-        title="Total Tasks"
-        value={stats.totalTasks}
-        icon={ClipboardList}
-        description={`${stats.tasksInProgress} in progress`}
-      />
-      
-      <StatCard
-        title="Completed Tasks"
-        value={stats.completedTasks}
-        icon={CheckCircle}
-        description={`${completionRate}% completion rate`}
-        variant="success"
-      />
-      
-      <StatCard
-        title="Overdue Tasks"
-        value={stats.overdueTasks}
-        icon={AlertTriangle}
-        description="Need attention"
-        variant={stats.overdueTasks > 0 ? "danger" : "default"}
-      />
+  // Render different stats based on user role
+  if (isAdmin) {
+    // Admin view - system-wide stats
+    return (
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {/* Tasks Overview */}
+        <StatCard
+          title="Total Tasks (System)"
+          value={stats.totalTasks}
+          icon={ClipboardList}
+          description={`${stats.tasksInProgress} in progress`}
+        />
+        
+        <StatCard
+          title="Completed Tasks"
+          value={stats.completedTasks}
+          icon={CheckCircle}
+          description={`${completionRate}% completion rate`}
+          variant="success"
+        />
+        
+        <StatCard
+          title="Overdue Tasks"
+          value={stats.overdueTasks}
+          icon={AlertTriangle}
+          description="Need attention"
+          variant={stats.overdueTasks > 0 ? "danger" : "default"}
+        />
 
-      {/* Team Overview */}
-      <StatCard
-        title="Team Members"
-        value={stats.totalTeamMembers}
-        icon={Users}
-        description={`${stats.activeTeamMembers} active`}
-      />
+        {/* Team Overview */}
+        <StatCard
+          title="Team Members"
+          value={stats.totalTeamMembers}
+          icon={Users}
+          description={`${stats.activeTeamMembers} active`}
+        />
 
-      {/* Projects Overview */}
-      <StatCard
-        title="Projects"
-        value={stats.totalProjects}
-        icon={FolderKanban}
-        description={`${stats.activeProjects} active`}
-      />
+        {/* Projects Overview */}
+        <StatCard
+          title="Projects (System)"
+          value={stats.totalProjects}
+          icon={FolderKanban}
+          description={`${stats.activeProjects} active`}
+        />
 
-      {/* Pending Approvals */}
-      <StatCard
-        title="Pending Approvals"
-        value={stats.pendingApprovals}
-        icon={UserPlus}
-        description="Awaiting review"
-        variant={stats.pendingApprovals > 0 ? "warning" : "default"}
-      />
+        {/* Pending Approvals */}
+        <StatCard
+          title="Pending Approvals"
+          value={stats.pendingApprovals}
+          icon={UserPlus}
+          description="Awaiting review"
+          variant={stats.pendingApprovals > 0 ? "warning" : "default"}
+        />
 
-      {/* Recent Activity */}
-      <StatCard
-        title="Tasks This Week"
-        value={stats.recentActivity.tasksCompleted}
-        icon={Calendar}
-        description="Completed this week"
-        variant="success"
-      />
+        {/* Recent Activity */}
+        <StatCard
+          title="Tasks This Week"
+          value={stats.recentActivity.tasksCompleted}
+          icon={Calendar}
+          description="Completed this week"
+          variant="success"
+        />
 
-      <StatCard
-        title="New Registrations"
-        value={stats.recentActivity.newRegistrations}
-        icon={UserPlus}
-        description="This week"
-      />
-    </div>
-  )
+        <StatCard
+          title="New Registrations"
+          value={stats.recentActivity.newRegistrations}
+          icon={UserPlus}
+          description="This week"
+        />
+      </div>
+    )
+  } else {
+    // Regular user view - personal stats
+    return (
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {/* Personal Task Stats */}
+        <StatCard
+          title="My Tasks"
+          value={stats.totalTasks}
+          icon={Target}
+          description={`${stats.tasksInProgress} in progress`}
+        />
+        
+        <StatCard
+          title="Completed"
+          value={stats.completedTasks}
+          icon={CheckCircle}
+          description={`${completionRate}% completion rate`}
+          variant="success"
+        />
+        
+        <StatCard
+          title="Overdue"
+          value={stats.overdueTasks}
+          icon={AlertTriangle}
+          description="Need attention"
+          variant={stats.overdueTasks > 0 ? "danger" : "default"}
+        />
+
+        {/* My Projects */}
+        <StatCard
+          title="My Projects"
+          value={stats.totalProjects}
+          icon={FolderKanban}
+          description={`${stats.activeProjects} active`}
+        />
+
+        {/* My Teams (if available) */}
+        {stats.myTeams !== undefined && (
+          <StatCard
+            title="My Teams"
+            value={stats.myTeams}
+            icon={Shield}
+            description={`${stats.myActiveTeams || 0} active`}
+          />
+        )}
+
+        {/* Recent Activity */}
+        <StatCard
+          title="Tasks This Week"
+          value={stats.recentActivity.tasksCompleted}
+          icon={Calendar}
+          description="Completed this week"
+          variant="success"
+        />
+
+        {/* Staff users can see a bit more context */}
+        {isStaffOrAbove && (
+          <StatCard
+            title="Team Tasks"
+            value={stats.totalTasks - stats.completedTasks}
+            icon={Users}
+            description="Active in my teams"
+          />
+        )}
+      </div>
+    )
+  }
 } 
