@@ -16,6 +16,7 @@ import {
   UsersIcon,
   WalletIcon,
   FolderKanbanIcon,
+  Users2Icon,
   type LucideIcon,
 } from "lucide-react"
 import { useSession } from "next-auth/react"
@@ -34,6 +35,7 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  SidebarGroupLabel,
 } from "@/components/ui/sidebar"
 import { usePermissions } from "@/lib/hooks/usePermissions"
 import { usePendingUsersCount } from "@/lib/hooks/use-pending-users"
@@ -74,13 +76,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: LayoutDashboardIcon,
     });
     
-    // Team Management - staff and above with pending badge for admins
+    // Team Members - staff and above with pending badge for admins
     if (permissions.canViewTeam) {
       items.push({
-        title: "Team Management",
+        title: "System Users",
         url: "/dashboard/team",
-        icon: UsersIcon,
+        icon: Users2Icon,
         badge: permissions.canManageUsers && pendingCount > 0 ? pendingCount : undefined,
+      });
+    }
+    
+    // Teams (organizational structure) - staff and above
+    if (permissions.canViewTeam) {
+      items.push({
+        title: "Teams Management",
+        url: "/dashboard/teams",
+        icon: UsersIcon,
       });
     }
     

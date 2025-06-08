@@ -18,6 +18,21 @@ export interface Task {
     lastName: string
     avatar: string | null
   }[]
+  teams: {
+    id: string
+    name: string
+    color: string | null
+    icon: string | null
+    members: {
+      id: string
+      user: {
+        id: string
+        firstName: string
+        lastName: string
+        avatar: string | null
+      }
+    }[]
+  }[]
   projectId: string | null
   project: {
     id: string
@@ -73,6 +88,7 @@ export interface CreateTaskData {
   priority?: string
   status?: string
   assigneeIds?: string[] | string
+  teamIds?: string[]
   projectId?: string
   startDate?: string | Date | null
   endDate?: string | Date | null

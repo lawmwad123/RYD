@@ -25,9 +25,10 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useAddTask } from "@/lib/hooks/use-tasks"
-import { useTeamMembers } from "@/lib/hooks/use-team-members"
+import { useUsers } from "@/lib/hooks/use-users"
 import { useProjects } from "@/lib/hooks/use-projects"
-import { CalendarIcon, Loader2, X, AlertTriangle } from "lucide-react"
+import { useTeams } from "@/lib/hooks/use-teams"
+import { CalendarIcon, Loader2, X, AlertTriangle, Users, Shield } from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { DateRange } from "react-day-picker"
@@ -48,6 +49,7 @@ const taskSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().optional(),
   assigneeIds: z.array(z.string()).optional(),
+  teamIds: z.array(z.string()).optional(),
   projectId: z.string().optional(),
   startDate: z.date().optional().nullable(),
   endDate: z.date().optional().nullable(),
@@ -66,6 +68,7 @@ export function AddTaskSheet({ trigger, onSuccess }: AddTaskSheetProps) {
       title: "",
       description: "",
       assigneeIds: [],
+      teamIds: [],
       projectId: "",
       startDate: null,
       endDate: null,
@@ -75,8 +78,11 @@ export function AddTaskSheet({ trigger, onSuccess }: AddTaskSheetProps) {
     },
   })
 
-  // Fetch team members for assignee dropdown
-  const { data: teamMembers = [], isLoading: isLoadingTeamMembers } = useTeamMembers()
+  // Fetch users for assignee dropdown
+  const { data: users = [], isLoading: isLoadingUsers } = useUsers()
+  
+  // Fetch teams for team assignment dropdown  
+  const { data: teams = [], isLoading: isLoadingTeams } = useTeams({ activeOnly: true })
   
   // Fetch projects for project dropdown
   const { data: projects = [], isLoading: isLoadingProjects } = useProjects()
@@ -84,9 +90,9 @@ export function AddTaskSheet({ trigger, onSuccess }: AddTaskSheetProps) {
   // Add task mutation
   const addTask = useAddTask()
 
-  // Filter only active team members for assignment
-  const activeTeamMembers = teamMembers.filter(member => member.status === 'ACTIVE')
-  const inactiveMembers = teamMembers.filter(member => member.status !== 'ACTIVE')
+  // Filter only active users for assignment
+  const activeUsers = users.filter(user => user.status === 'ACTIVE')
+  const inactiveUsers = users.filter(user => user.status !== 'ACTIVE')
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -95,7 +101,11 @@ export function AddTaskSheet({ trigger, onSuccess }: AddTaskSheetProps) {
 
   const handleSelectChange = (name: string, value: string) => {
     // Handle special values for assigneeId and projectId
-    if (name === 'assigneeIds' && (value === 'loading' || value === 'no-members')) {
+    if (name === 'assigneeIds' && (value === 'loading' || value === 'no-users')) {
+      return; // Ignore these special values
+    }
+    
+    if (name === 'teamIds' && (value === 'loading' || value === 'no-teams')) {
       return; // Ignore these special values
     }
     
@@ -106,20 +116,27 @@ export function AddTaskSheet({ trigger, onSuccess }: AddTaskSheetProps) {
     form.setValue(name as any, value)
   }
 
-  const handleAddAssignee = (memberId: string) => {
+  const handleAddAssignee = (userId: string) => {
     // Clear any previous validation errors
     setAssigneeValidationError(null)
     
     const currentAssignees = form.getValues("assigneeIds") || [];
-    if (!currentAssignees.includes(memberId)) {
-      // Check if the member is active
-      const selectedMember = teamMembers.find(m => m.id === memberId)
-      if (selectedMember && selectedMember.status !== 'ACTIVE') {
-        setAssigneeValidationError(`Cannot assign task to ${selectedMember.firstName} ${selectedMember.lastName}: User is ${selectedMember.status.toLowerCase()}`)
+    if (!currentAssignees.includes(userId)) {
+      // Check if the user is active
+      const selectedUser = users.find(u => u.id === userId)
+      if (selectedUser && selectedUser.status !== 'ACTIVE') {
+        setAssigneeValidationError(`Cannot assign task to ${selectedUser.firstName} ${selectedUser.lastName}: User is ${selectedUser.status.toLowerCase()}`)
         return
       }
       
-      form.setValue("assigneeIds", [...currentAssignees, memberId]);
+      form.setValue("assigneeIds", [...currentAssignees, userId]);
+    }
+  }
+
+  const handleAddTeam = (teamId: string) => {
+    const currentTeams = form.getValues("teamIds") || [];
+    if (!currentTeams.includes(teamId)) {
+      form.setValue("teamIds", [...currentTeams, teamId]);
     }
   }
 
@@ -136,8 +153,8 @@ export function AddTaskSheet({ trigger, onSuccess }: AddTaskSheetProps) {
       // Final validation of assignees before submission
       if (data.assigneeIds && data.assigneeIds.length > 0) {
         const invalidAssignees = data.assigneeIds.filter(id => {
-          const member = teamMembers.find(m => m.id === id)
-          return !member || member.status !== 'ACTIVE'
+          const user = users.find(u => u.id === id)
+          return !user || user.status !== 'ACTIVE'
         })
         
         if (invalidAssignees.length > 0) {
@@ -178,8 +195,14 @@ export function AddTaskSheet({ trigger, onSuccess }: AddTaskSheetProps) {
 
   // Find assignee names for displaying selected assignees
   const getAssigneeName = (id: string) => {
-    const assignee = teamMembers.find(member => member.id === id)
+    const assignee = users.find(user => user.id === id)
     return assignee ? `${assignee.firstName} ${assignee.lastName}` : "Unknown"
+  }
+
+  // Find team names for displaying selected teams
+  const getTeamName = (id: string) => {
+    const team = teams.find(team => team.id === id)
+    return team ? team.name : "Unknown"
   }
 
   // Helper to remove a selected assignee
@@ -188,6 +211,12 @@ export function AddTaskSheet({ trigger, onSuccess }: AddTaskSheetProps) {
     form.setValue("assigneeIds", currentAssignees.filter(a => a !== id))
     // Clear validation error when removing assignees
     setAssigneeValidationError(null)
+  }
+
+  // Helper to remove a selected team
+  const removeTeam = (id: string) => {
+    const currentTeams = form.getValues("teamIds") || []
+    form.setValue("teamIds", currentTeams.filter(t => t !== id))
   }
 
   return (
@@ -199,7 +228,7 @@ export function AddTaskSheet({ trigger, onSuccess }: AddTaskSheetProps) {
         <SheetHeader>
           <SheetTitle>Add New Task</SheetTitle>
           <SheetDescription>
-            Create a new task and assign it to team members.
+            Create a new task and assign it to users or teams.
           </SheetDescription>
         </SheetHeader>
         <form onSubmit={onSubmit} className="space-y-6 py-4">
@@ -256,30 +285,30 @@ export function AddTaskSheet({ trigger, onSuccess }: AddTaskSheetProps) {
                 <SelectValue placeholder="Select assignees" />
               </SelectTrigger>
               <SelectContent>
-                {isLoadingTeamMembers ? (
+                {isLoadingUsers ? (
                   <SelectItem value="loading" disabled>
                     <div className="flex items-center gap-2">
                       <Loader2 className="h-4 w-4 animate-spin" />
                       <span>Loading...</span>
                     </div>
                   </SelectItem>
-                ) : activeTeamMembers.length === 0 ? (
-                  <SelectItem value="no-members" disabled>No active team members found</SelectItem>
+                ) : activeUsers.length === 0 ? (
+                  <SelectItem value="no-users" disabled>No active users found</SelectItem>
                 ) : (
                   <>
-                    {activeTeamMembers.map((member) => (
-                    <SelectItem key={member.id} value={member.id}>
-                      {member.firstName} {member.lastName}
+                    {activeUsers.map((user) => (
+                    <SelectItem key={user.id} value={user.id}>
+                      {user.firstName} {user.lastName}
                     </SelectItem>
                     ))}
-                    {inactiveMembers.length > 0 && (
+                    {inactiveUsers.length > 0 && (
                       <>
                         <div className="px-2 py-1 text-xs text-muted-foreground border-t">
-                          Inactive Members (Cannot be assigned)
+                          Inactive Users (Cannot be assigned)
                         </div>
-                        {inactiveMembers.map((member) => (
-                          <SelectItem key={member.id} value={member.id} disabled>
-                            {member.firstName} {member.lastName} ({member.status.toLowerCase()})
+                        {inactiveUsers.map((user) => (
+                          <SelectItem key={user.id} value={user.id} disabled>
+                            {user.firstName} {user.lastName} ({user.status.toLowerCase()})
                           </SelectItem>
                         ))}
                       </>
@@ -306,6 +335,51 @@ export function AddTaskSheet({ trigger, onSuccess }: AddTaskSheetProps) {
                     <X 
                       className="h-3 w-3 cursor-pointer" 
                       onClick={() => removeAssignee(id)}
+                    />
+                  </Badge>
+                ))}
+              </div>
+            )}
+          </div>
+          
+          {/* Teams */}
+          <div className="space-y-2">
+            <Label htmlFor="teamIds">Teams</Label>
+            <Select
+              onValueChange={(value) => handleAddTeam(value)}
+            >
+              <SelectTrigger id="teamIds">
+                <SelectValue placeholder="Select teams" />
+              </SelectTrigger>
+              <SelectContent>
+                {isLoadingTeams ? (
+                  <SelectItem value="loading" disabled>
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <span>Loading...</span>
+                    </div>
+                  </SelectItem>
+                ) : teams.length === 0 ? (
+                  <SelectItem value="no-teams" disabled>No active teams found</SelectItem>
+                ) : (
+                  teams.map((team) => (
+                    <SelectItem key={team.id} value={team.id}>
+                      {team.name}
+                    </SelectItem>
+                  ))
+                )}
+              </SelectContent>
+            </Select>
+            
+            {/* Display selected teams */}
+            {form.watch("teamIds")?.length > 0 && (
+              <div className="flex flex-wrap gap-1 mt-2">
+                {form.watch("teamIds").map(id => (
+                  <Badge key={id} variant="secondary" className="flex items-center gap-1">
+                    {getTeamName(id)}
+                    <X 
+                      className="h-3 w-3 cursor-pointer" 
+                      onClick={() => removeTeam(id)}
                     />
                   </Badge>
                 ))}

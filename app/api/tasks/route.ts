@@ -63,6 +63,7 @@ export async function GET(request: NextRequest) {
     // Parse query parameters
     const searchParams = request.nextUrl.searchParams;
     const assigneeId = searchParams.get("assigneeId");
+    const teamId = searchParams.get("teamId");
     const projectId = searchParams.get("projectId");
     const status = searchParams.get("status");
     const priority = searchParams.get("priority");
@@ -74,6 +75,14 @@ export async function GET(request: NextRequest) {
       filters.assignees = {
         some: {
           userId: assigneeId
+        }
+      };
+    }
+    
+    if (teamId) {
+      filters.teams = {
+        some: {
+          teamId: teamId
         }
       };
     }
@@ -95,7 +104,7 @@ export async function GET(request: NextRequest) {
     const canViewAllTasks = hasPermission(user.role, 'VIEW_ALL_TASKS');
     
     if (!canViewAllTasks) {
-      // User can only see tasks they created or are assigned to
+      // User can only see tasks they created, are assigned to, or are part of assigned teams
       const userTaskFilters = {
         OR: [
           { createdById: user.id },
@@ -103,6 +112,19 @@ export async function GET(request: NextRequest) {
             assignees: {
               some: {
                 userId: user.id
+              }
+            }
+          },
+          {
+            teams: {
+              some: {
+                team: {
+                  members: {
+                    some: {
+                      userId: user.id
+                    }
+                  }
+                }
               }
             }
           }
@@ -114,6 +136,7 @@ export async function GET(request: NextRequest) {
         filters.AND = [userTaskFilters, { ...filters }];
         // Remove the filters we just moved to AND
         delete filters.assignees;
+        delete filters.teams;
         delete filters.projectId;
         delete filters.status;
         delete filters.priority;
@@ -137,6 +160,30 @@ export async function GET(request: NextRequest) {
                 firstName: true,
                 lastName: true,
                 avatar: true,
+              },
+            },
+          },
+        },
+        teams: {
+          include: {
+            team: {
+              select: {
+                id: true,
+                name: true,
+                color: true,
+                icon: true,
+                members: {
+                  include: {
+                    user: {
+                      select: {
+                        id: true,
+                        firstName: true,
+                        lastName: true,
+                        avatar: true,
+                      },
+                    },
+                  },
+                },
               },
             },
           },
@@ -183,10 +230,11 @@ export async function GET(request: NextRequest) {
       return permissions.canView;
     });
     
-    // Transform the data to match existing structure with multiple assignees
+    // Transform the data to match existing structure with both assignees and teams
     const transformedTasks = filteredTasks.map(task => ({
       ...task,
-      assignees: task.assignees.map(ta => ta.user)
+      assignees: task.assignees.map(ta => ta.user),
+      teams: task.teams.map(tt => tt.team)
     }));
     
     return NextResponse.json(transformedTasks);
@@ -259,7 +307,9 @@ export async function POST(request: NextRequest) {
 
     // Prepare assignee connections
     const assigneeIds = Array.isArray(data.assigneeIds) ? data.assigneeIds : [];
+    const teamIds = Array.isArray(data.teamIds) ? data.teamIds : [];
     console.log("[API Tasks POST] Assignee IDs:", assigneeIds);
+    console.log("[API Tasks POST] Team IDs:", teamIds);
     
     // Validate that all assignee IDs exist and are active users
     if (assigneeIds.length > 0) {
@@ -307,6 +357,32 @@ export async function POST(request: NextRequest) {
             message: "One or more selected assignees are invalid, inactive, or suspended" 
           }, { status: 400 });
         }
+      }
+    }
+
+    // Validate that all team IDs exist and are active teams
+    if (teamIds.length > 0) {
+      const validTeams = await prisma.team.findMany({
+        where: {
+          id: { in: teamIds },
+          isActive: true
+        },
+        select: { 
+          id: true, 
+          name: true,
+          isActive: true 
+        }
+      });
+      
+      console.log("[API Tasks POST] Valid teams found:", validTeams.length, "out of", teamIds.length);
+      
+      if (validTeams.length !== teamIds.length) {
+        const invalidIds = teamIds.filter((id: string) => !validTeams.find(t => t.id === id));
+        console.log("[API Tasks POST] Invalid team IDs:", invalidIds);
+        
+        return NextResponse.json({ 
+          message: "One or more selected teams are invalid or inactive" 
+        }, { status: 400 });
       }
     }
 
@@ -363,6 +439,11 @@ export async function POST(request: NextRequest) {
           create: assigneeIds.map((id: string) => ({
             userId: id
           }))
+        },
+        teams: {
+          create: teamIds.map((id: string) => ({
+            teamId: id
+          }))
         }
       },
       include: {
@@ -375,6 +456,30 @@ export async function POST(request: NextRequest) {
                 lastName: true,
                 avatar: true,
                 role: true,
+              },
+            },
+          },
+        },
+        teams: {
+          include: {
+            team: {
+              select: {
+                id: true,
+                name: true,
+                color: true,
+                icon: true,
+                members: {
+                  include: {
+                    user: {
+                      select: {
+                        id: true,
+                        firstName: true,
+                        lastName: true,
+                        avatar: true,
+                      },
+                    },
+                  },
+                },
               },
             },
           },
@@ -401,7 +506,8 @@ export async function POST(request: NextRequest) {
     // Transform the data to match existing structure
     const transformedTask = {
       ...task,
-      assignees: task.assignees.map((ta: any) => ta.user)
+      assignees: task.assignees.map((ta: any) => ta.user),
+      teams: task.teams.map((tt: any) => tt.team)
     };
     
     return NextResponse.json(transformedTask);

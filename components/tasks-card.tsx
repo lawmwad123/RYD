@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Calendar, MessageSquare, Paperclip, Clock, AlertCircle, Users } from "lucide-react";
+import { Calendar, MessageSquare, Paperclip, Clock, AlertCircle, Users, Shield } from "lucide-react";
 import { format, parseISO, isPast } from "date-fns";
 
 interface TaskCardProps {
@@ -59,9 +59,10 @@ export function TaskCard({ task }: TaskCardProps) {
         )}
       </CardHeader>
       <CardContent className="space-y-4">
-        {/* Assignees */}
+        {/* Individual Assignees */}
         {task.assignees && task.assignees.length > 0 && (
           <div className="flex items-center gap-2">
+            <Users className="h-4 w-4 text-muted-foreground" />
             {task.assignees.length === 1 ? (
               <>
                 <Avatar className="h-6 w-6">
@@ -86,12 +87,30 @@ export function TaskCard({ task }: TaskCardProps) {
                     </Avatar>
                   ))}
                 </div>
-                <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                  <Users className="h-3 w-3" />
-                  <span>{task.assignees.length} assigned</span>
-                </div>
+                <span className="text-sm text-muted-foreground">
+                  {task.assignees.length} individual{task.assignees.length > 1 ? 's' : ''}
+                </span>
               </>
             )}
+          </div>
+        )}
+
+        {/* Team Assignments */}
+        {task.teams && task.teams.length > 0 && (
+          <div className="flex items-center gap-2">
+            <Shield className="h-4 w-4 text-muted-foreground" />
+            <div className="flex flex-wrap gap-1">
+              {task.teams.map((team) => (
+                <Badge 
+                  key={team.id} 
+                  variant="outline" 
+                  className="text-xs"
+                  style={{ backgroundColor: team.color || '#f3f4f6', color: '#374151' }}
+                >
+                  {team.name}
+                </Badge>
+              ))}
+            </div>
           </div>
         )}
         

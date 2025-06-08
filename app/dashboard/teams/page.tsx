@@ -1,19 +1,19 @@
 import { Metadata } from "next"
 import { SiteHeader } from "@/components/site-header"
 import { Button } from "@/components/ui/button"
-import { FilterIcon, DownloadIcon } from "lucide-react"
+import { FilterIcon, DownloadIcon, PlusIcon } from "lucide-react"
 import { auth } from "@/lib/auth"
-import { AddMemberSheet } from "@/components/team/add-member-sheet"
 import { Suspense } from "react"
-import { UserStats } from "@/components/team/user-stats"
-import { UsersClient } from "@/components/team/users-client"
+import { TeamsClient } from "@/components/teams/teams-client"
+import { TeamStats } from "@/components/teams/team-stats"
+import PermissionChecker from "@/components/auth/permission-checker"
 
 export const metadata: Metadata = {
-  title: "Team Members Management | RYD Mental Health",
-  description: "Manage individual team members, volunteers and staff",
+  title: "Teams Management | RYD Mental Health",
+  description: "Manage organizational teams, team structure, and assign system users to teams",
 }
 
-export default async function TeamPage() {
+export default async function TeamsManagementPage() {
   await auth()
   
   return (
@@ -25,9 +25,9 @@ export default async function TeamPage() {
             <div className="px-4 md:px-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h1 className="text-2xl font-semibold">System Users</h1>
+                  <h1 className="text-2xl font-semibold">Teams Management</h1>
                   <p className="text-muted-foreground">
-                    Manage individual system users, volunteers and staff.
+                    Manage organizational teams, team structure, and assign system users to teams.
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -39,25 +39,36 @@ export default async function TeamPage() {
                     <DownloadIcon className="mr-2 h-4 w-4" />
                     Export
                   </Button>
-                  <AddMemberSheet />
                 </div>
               </div>
             </div>
             
-            {/* User Statistics */}
-            <div className="grid grid-cols-1 gap-4 px-4 md:grid-cols-5 md:px-6 lg:grid-cols-5">
+            <div className="grid grid-cols-1 gap-4 px-4 md:grid-cols-4 md:px-6 lg:grid-cols-4">
               <Suspense fallback={<div className="py-4 text-center">Loading stats...</div>}>
-                <UserStats />
+                <TeamStats />
               </Suspense>
             </div>
             
-            {/* Enhanced Users Management */}
             <div className="px-4 md:px-6">
               <div className="rounded-lg border shadow-sm">
                 <div className="p-6">
-                  <Suspense fallback={<div className="py-8 text-center">Loading users...</div>}>
-                    <UsersClient />
-                  </Suspense>
+                  <PermissionChecker 
+                    requiredPermission="VIEW_TEAM"
+                    fallback={
+                      <div className="flex items-center justify-center py-8">
+                        <div className="text-center">
+                          <h2 className="text-lg font-semibold mb-2">Access Denied</h2>
+                          <p className="text-muted-foreground">
+                            You don't have permission to view teams. Please contact an administrator.
+                          </p>
+                        </div>
+                      </div>
+                    }
+                  >
+                    <Suspense fallback={<div className="py-8 text-center">Loading teams...</div>}>
+                      <TeamsClient />
+                    </Suspense>
+                  </PermissionChecker>
                 </div>
               </div>
             </div>

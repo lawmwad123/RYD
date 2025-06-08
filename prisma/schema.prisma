@@ -78,6 +78,7 @@ model User {
   comments           TaskComment[]
   tasksCreated       Task[]          @relation("TaskCreator")
   checkIns           CheckIn[]
+  teams              UserTeam[]      // New: User team memberships
   
   // Audit fields
   createdAt          DateTime        @default(now())
@@ -138,7 +139,8 @@ model Task {
   comments    TaskComment[]
   timeEntries TimeEntry[]
   completedAt DateTime?
-  assignees   TaskAssignee[]
+  assignees   TaskAssignee[]   // Individual user assignments
+  teams       TaskTeam[]       // Team assignments
 }
 
 enum TaskPriority {
@@ -352,4 +354,51 @@ model Client {
   projects  Project[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+}
+
+// Team model for organizational structure
+model Team {
+  id          String     @id @default(cuid())
+  name        String     @unique
+  description String?
+  color       String?    @default("#4f46e5")
+  icon        String?    // Icon name for UI display
+  isActive    Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  
+  // Relations
+  members     UserTeam[]
+  tasks       TaskTeam[]
+}
+
+// User-Team junction table (many-to-many)
+model UserTeam {
+  id       String   @id @default(cuid())
+  userId   String
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  teamId   String
+  team     Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  role     TeamRole @default(MEMBER)
+  joinedAt DateTime @default(now())
+  
+  @@unique([userId, teamId])
+}
+
+enum TeamRole {
+  LEADER
+  COORDINATOR
+  MEMBER
+}
+
+// Task-Team junction table for team assignments
+model TaskTeam {
+  id         String   @id @default(cuid())
+  taskId     String
+  task       Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  teamId     String
+  team       Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  assignedAt DateTime @default(now())
+  
+  @@unique([taskId, teamId])
 }
